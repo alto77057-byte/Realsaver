@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ReelSaver – Instagram Reel Downloader</title>
+<meta name="description" content="Download Instagram reels, photos and carousels in HD. Copy captions and hashtags. No signup.">
+<meta name="theme-color" content="#e1148f">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" href="/icon-192.png">
+<link rel="apple-touch-icon" href="/icon-512.png">
+<style>
+:root{--ink:#0f1629;--mute:#5d6578;--line:#ece8f1;--bg:#fff;--soft:#faf6fc;--grad:linear-gradient(135deg,#3b5bff 0%,#b21fd6 35%,#f0189b 65%,#ff7a2f 100%);--pink:#e1148f}
+@media(prefers-color-scheme:dark){:root{--ink:#f4f1f8;--mute:#a7a0b8;--line:#2a2438;--bg:#12101a;--soft:#1b1726}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:ui-rounded,"SF Pro Rounded",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom)}
+main{max-width:560px;margin:0 auto;padding:20px 18px 40px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:26px;letter-spacing:-.03em}
+.brand img{width:40px;height:40px;border-radius:11px}
+.brand b{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+#install{margin-left:auto;font:inherit;font-size:14px;font-weight:700;border:1.5px solid var(--pink);color:var(--pink);background:none;border-radius:99px;padding:7px 14px;display:none}
+h1{font-size:34px;line-height:1.08;letter-spacing:-.035em;font-weight:900;margin:34px 0 8px}
+.sub{color:var(--mute);margin:0 0 22px;font-size:16px}
+.box{display:flex;gap:8px;background:var(--soft);border:1.5px solid var(--line);border-radius:16px;padding:6px}
+.box:focus-within{border-color:var(--pink)}
+input{flex:1;min-width:0;border:0;background:none;font:inherit;font-size:16px;color:var(--ink);padding:10px;outline:none}
+.btn{font:inherit;font-weight:800;border:0;border-radius:12px;padding:0 18px;cursor:pointer;color:#fff;background:var(--grad);min-height:46px}
+.btn:disabled{opacity:.6}
+.ghost{background:none;color:var(--ink);border:1.5px solid var(--line)}
+.btn:focus-visible,input:focus-visible,a:focus-visible,button:focus-visible{outline:3px solid var(--pink);outline-offset:2px}
+#msg{margin:12px 2px 0;font-size:14px;min-height:20px;color:var(--mute)}
+#msg.err{color:#d6244a;font-weight:600}
+#result{margin-top:18px;display:none}
+.card{border:1.5px solid var(--line);border-radius:18px;overflow:hidden;background:var(--bg)}
+.media{display:grid;gap:10px;padding:10px}
+.item video,.item img{width:100%;max-height:60vh;object-fit:contain;border-radius:12px;background:#000;display:block}
+.item .row{display:flex;gap:8px;margin-top:8px}
+.item .row a{flex:1;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center}
+.cap{padding:4px 16px 16px}
+.cap p{white-space:pre-wrap;margin:6px 0 10px;font-size:15px;line-height:1.45;max-height:7.5em;overflow:auto}
+.tags{color:var(--pink);font-weight:600;font-size:14px;margin-bottom:10px;word-break:break-word}
+.cap .row{display:flex;gap:8px}
+.cap .row .btn{flex:1;min-height:42px;font-size:14px}
+.hist h2{font-size:17px;margin:30px 0 10px;letter-spacing:-.01em}
+.hist{display:none}
+#hlist{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+#hlist button{border:0;padding:0;background:var(--soft);border-radius:12px;aspect-ratio:1;overflow:hidden;cursor:pointer;position:relative}
+#hlist img{width:100%;height:100%;object-fit:cover}
+#clear{background:none;border:0;color:var(--mute);font:inherit;font-size:13px;text-decoration:underline;cursor:pointer;margin-top:10px}
+footer{margin-top:36px;color:var(--mute);font-size:12.5px;line-height:1.5}
+</style>
+</head>
+<body>
+<main>
+  <div class="brand"><img src="/icon-192.png" alt=""><span>Reel<b>Saver</b></span><button id="install">Install</button></div>
+  <h1>Save any public reel in HD.</h1>
+  <p class="sub">Paste a link. Get the video, photos, caption and hashtags.</p>
+
+  <div class="box">
+    <input id="u" type="url" inputmode="url" placeholder="instagram.com/reel/…" aria-label="Instagram link" autocomplete="off">
+    <button class="btn ghost" id="paste" type="button" style="min-height:46px">Paste</button>
+    <button class="btn" id="go" type="button">Save</button>
+  </div>
+  <div id="msg" role="status"></div>
+
+  <div id="result"><div class="card">
+    <div class="media" id="media"></div>
+    <div class="cap">
+      <p id="cap"></p><div class="tags" id="tags"></div>
+      <div class="row"><button class="btn ghost" id="cc">Copy caption</button><button class="btn ghost" id="ct">Copy hashtags</button></div>
+    </div>
+  </div></div>
+
+  <section class="hist" id="hist">
+    <h2>Recent</h2><div id="hlist"></div><button id="clear">Clear history</button>
+  </section>
+
+  <footer>Only download content you own or have permission to use. ReelSaver is not affiliated with Instagram. Private accounts are not supported.</footer>
+</main>
+<script>
+const $ = id => document.getElementById(id);
+const KEY = 'rs_history';
+let cur = null;
+
+function history(){ try { return JSON.parse(localStorage.getItem(KEY) || '[]'); } catch { return []; } }
+function saveHistory(url, d){
+  try {
+    const h = history().filter(x => x.url !== url);
+    h.unshift({ url, thumb: d.items[0].thumb, t: Date.now() });
+    localStorage.setItem(KEY, JSON.stringify(h.slice(0, 18)));
+  } catch {}
+  renderHistory();
+}
+function renderHistory(){
+  const h = history(); $('hist').style.display = h.length ? 'block' : 'none';
+  $('hlist').innerHTML = '';
+  h.forEach(x => {
+    const b = document.createElement('button'); b.setAttribute('aria-label', 'Open saved reel');
+    const i = document.createElement('img'); i.src = '/api/file?u=' + encodeURIComponent(x.thumb) + '&n=t.jpg'; i.loading = 'lazy';
+    i.onerror = () => { b.textContent = '▶'; i.remove(); };
+    b.appendChild(i); b.onclick = () => { $('u').value = x.url; run(); };
+    $('hlist').appendChild(b);
+  });
+}
+function say(t, err){ $('msg').textContent = t; $('msg').className = err ? 'err' : ''; }
+
+async function run(){
+  const url = $('u').value.trim(); if (!url) return say('Paste an Instagram link first.', true);
+  $('go').disabled = true; say('Fetching…'); $('result').style.display = 'none';
+  try {
+    const r = await fetch('/api/download', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url }) });
+    const d = await r.json();
+    if (!r.ok) throw new Error(d.error || 'Something went wrong.');
+    cur = d; show(d); saveHistory(url, d);
+    say(d.remaining + ' free saves left today.');
+  } catch (e) { say(e.message, true); }
+  $('go').disabled = false;
+}
+function show(d){
+  const m = $('media'); m.innerHTML = '';
+  d.items.forEach((it, n) => {
+    const w = document.createElement('div'); w.className = 'item';
+    const el = document.createElement(it.type === 'video' ? 'video' : 'img');
+    if (it.type === 'video') { el.src = it.url; el.controls = true; el.playsInline = true; el.poster = it.thumb; } else { el.src = it.url; el.alt = ''; }
+    const ext = it.type === 'video' ? 'mp4' : 'jpg';
+    const a = document.createElement('a'); a.className = 'btn'; a.textContent = it.type === 'video' ? 'Download video' : 'Download photo';
+    a.href = '/api/file?u=' + encodeURIComponent(it.url) + '&dl=1&n=reelsaver-' + (n + 1) + '.' + ext;
+    const row = document.createElement('div'); row.className = 'row'; row.appendChild(a);
+    w.append(el, row); m.appendChild(w);
+  });
+  $('cap').textContent = d.caption || 'No caption.'; $('tags').textContent = d.hashtags.join(' ');
+  $('result').style.display = 'block'; $('result').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+async function copy(t, btn){
+  try { await navigator.clipboard.writeText(t); const o = btn.textContent; btn.textContent = 'Copied'; setTimeout(() => btn.textContent = o, 1200); } catch { say('Copy failed. Select the text manually.', true); }
+}
+$('go').onclick = run;
+$('u').addEventListener('keydown', e => e.key === 'Enter' && run());
+$('paste').onclick = async () => { try { $('u').value = await navigator.clipboard.readText(); run(); } catch { $('u').focus(); say('Long-press the box and choose Paste.'); } };
+$('cc').onclick = e => cur && copy(cur.caption, e.target);
+$('ct').onclick = e => cur && copy(cur.hashtags.join(' '), e.target);
+$('clear').onclick = () => { localStorage.removeItem(KEY); renderHistory(); };
+
+// PWA: install button + service worker + share target
+let dp; addEventListener('beforeinstallprompt', e => { e.preventDefault(); dp = e; $('install').style.display = 'block'; });
+$('install').onclick = async () => { if (!dp) return; dp.prompt(); await dp.userChoice; dp = null; $('install').style.display = 'none'; };
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+renderHistory();
+const q = new URLSearchParams(location.search), shared = q.get('url') || q.get('text');
+if (shared) { const m = shared.match(/https?:\/\/\S+/); if (m) { $('u').value = m[0]; run(); } }
+</script>
+</body>
+</html>
