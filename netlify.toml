@@ -1,0 +1,13 @@
+[build]
+  publish = "."
+  functions = "functions"
+
+[[redirects]]
+  from = "/api/download"
+  to = "/.netlify/functions/download"
+  status = 200
+
+[[redirects]]
+  from = "/api/file"
+  to = "/.netlify/functions/file"
+  status = 200
