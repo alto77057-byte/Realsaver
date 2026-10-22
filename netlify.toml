@@ -11,3 +11,13 @@
   from = "/api/file"
   to = "/.netlify/functions/file"
   status = 200
+
+[[redirects]]
+  from = "/icon-192.png"
+  to = "/icon-192-1.png"
+  status = 200
+
+[[redirects]]
+  from = "/icon-512.png"
+  to = "/icon-512-1.png"
+  status = 200
