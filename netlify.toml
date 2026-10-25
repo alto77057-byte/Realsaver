@@ -1,0 +1,33 @@
+[build]
+  publish = "."
+  functions = "functions"
+
+[[redirects]]
+  from = "/api/download"
+  to = "/.netlify/functions/download"
+  status = 200
+
+[[redirects]]
+  from = "/api/stories"
+  to = "/.netlify/functions/stories"
+  status = 200
+
+[[redirects]]
+  from = "/api/comments"
+  to = "/.netlify/functions/comments"
+  status = 200
+
+[[redirects]]
+  from = "/api/file"
+  to = "/.netlify/functions/file"
+  status = 200
+
+[[redirects]]
+  from = "/icon-192.png"
+  to = "/icon-192-1.png"
+  status = 200
+
+[[redirects]]
+  from = "/icon-512.png"
+  to = "/icon-512-1.png"
+  status = 200
