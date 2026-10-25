@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
+<title>ReelSaver setup check</title>
+<script>window.__dp=null;addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__dp=e});</script>
+<style>
+:root{color-scheme:dark light;--bg:#0f0b1e;--card:#171230;--ink:#f6f3ff;--mute:#b3add0;--line:#2e2757}
+@media(prefers-color-scheme:light){:root{--bg:#faf7ff;--card:#fff;--ink:#17112e;--mute:#5f5880;--line:#e6dcf7}}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
+main{max-width:640px;margin:0 auto;padding:22px 18px 50px}h1{font-size:26px;margin:8px 0}p{color:var(--mute)}
+#sum{font-weight:700;font-size:18px;margin:14px 0}
+.r{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px 14px;margin:8px 0;display:flex;gap:10px}
+.r i{font-style:normal;flex:none}.r b{display:block}.r span{color:var(--mute);font-size:14px}
+button{font:inherit;font-weight:700;color:#fff;background:linear-gradient(135deg,#7a3bff,#e1148f 70%,#ff6a3d);border:0;border-radius:12px;padding:12px 18px;margin-top:14px;cursor:pointer}
+</style></head><body><main>
+<h1>ReelSaver setup check</h1><p>This page checks that every file and function is live. Nothing here costs credit.</p>
+<div id="sum">Checking…</div><div id="out"></div>
+<button id="fix" type="button">Clear old app files and reload</button>
+<script>
+const out = document.getElementById('out'); let bad = 0;
+function row(ok, title, hint, warn){ if (!ok && !warn) bad++; const d = document.createElement('div'); d.className = 'r'; d.innerHTML = '<i>' + (ok ? '✅' : warn ? '⚠️' : '❌') + '</i><div><b></b><span></span></div>'; d.querySelector('b').textContent = title; d.querySelector('span').textContent = ok ? '' : hint; out.append(d); }
+async function code(u, opt){ try { return (await fetch(u, Object.assign({ cache: 'no-store' }, opt || {}))).status; } catch { return 0; } }
+(async () => {
+  for (const [u, n] of [['/index.html', 'Home page'], ['/manifest.webmanifest', 'App manifest'], ['/sw.js', 'Service worker file (sw.js)'], ['/glass-192.png', 'Icon 192'], ['/glass-512.png', 'Icon 512'], ['/glass-maskable.png', 'Icon maskable']]) {
+    const c = await code(u); row(c === 200, n + ' (' + u + ')', c + ': file missing or wrongly named. Upload it to GitHub with exactly this name (phones sometimes add "-1").');
+  }
+  for (const [u, n, want] of [['/api/download', 'Reel and post function', 405], ['/api/stories', 'Stories function', 405], ['/api/comments', 'Comments function', 405], ['/api/file?u=x', 'File function', 400]]) {
+    const c = await code(u); row(c === want, n, 'Got ' + c + '. Check netlify.toml has the /api redirect and the file is inside the "functions" folder with the right name (no extra dot).');
+  }
+  const reg = navigator.serviceWorker && await navigator.serviceWorker.getRegistration();
+  row(!!(reg && reg.active), 'Service worker running', 'Not running yet. Reload this page once. If it stays red, sw.js or a file it needs is missing.', true);
+  const ios = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  row(ios || !!window.__dp || matchMedia('(display-mode: standalone)').matches, 'Install prompt', ios ? '' : 'Chrome has not offered the install prompt yet. This is normal on the first visit. The Install button still shows steps.', true);
+  document.getElementById('sum').textContent = bad ? bad + ' problem' + (bad > 1 ? 's' : '') + ' found. Fix the red items.' : 'Everything looks good.';
+})();
+document.getElementById('fix').onclick = async () => { try { (await navigator.serviceWorker.getRegistrations()).forEach(r => r.unregister()); (await caches.keys()).forEach(k => caches.delete(k)); } catch (e) {} location.href = '/check.html?r=' + Date.now(); };
+</script></main></body></html>
