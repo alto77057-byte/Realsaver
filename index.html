@@ -6,6 +6,7 @@
 <title>ReelSaver – Instagram Reel Downloader</title>
 <meta name="description" content="Download Instagram reels, photos and carousels in the best quality. Save cover images, copy captions and hashtags. Free, fast, no signup.">
 <meta name="theme-color" content="#0f0b1e">
+<script>window.__dp=null;addEventListener('beforeinstallprompt',function(e){e.preventDefault();window.__dp=e});</script>
 <link rel="manifest" href="/manifest.webmanifest">
 <link rel="icon" href="/glass-192.png">
 <link rel="apple-touch-icon" href="/glass-512.png">
@@ -23,7 +24,7 @@ main{max-width:600px;margin:0 auto;padding:18px 18px 40px}
 .top{display:flex;align-items:center;gap:10px;font-weight:800;font-size:21px;letter-spacing:-.03em}
 .top img{width:40px;height:40px;border-radius:12px;box-shadow:0 6px 20px #e1148f55}
 .top b{background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
-#install{margin-left:auto;font:inherit;font-size:13px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer}
+#install{margin-inline-start:auto;font:inherit;font-size:13px;font-weight:600;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:8px 14px;cursor:pointer}
 .pill{display:inline-block;margin:30px 0 14px;font-size:12px;font-weight:600;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 12px}
 h1{font-size:clamp(32px,9vw,46px);line-height:1.05;letter-spacing:-.04em;font-weight:800;margin:0 0 12px}
 h1 em{font-style:normal;background:var(--g);-webkit-background-clip:text;background-clip:text;color:transparent}
@@ -92,7 +93,7 @@ button.chip{font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var
 #sheet{display:none;position:fixed;inset:0;background:#000b;z-index:50;align-items:flex-end;justify-content:center}
 .sh{background:var(--card);border:1px solid var(--line);border-radius:26px 26px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom));width:100%;max-width:600px}
 .sh h3{margin:0 0 12px;font-size:20px;letter-spacing:-.02em}
-.sh ol{margin:0 0 18px;padding-left:20px;line-height:1.8;color:var(--mute);font-size:15px}
+.sh ol{margin:0 0 18px;padding-inline-start:20px;line-height:1.8;color:var(--mute);font-size:15px}
 .sh .btn{width:100%}
 .flinks{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;font-size:13px}.flinks a{color:var(--mute)}
 #cbox{display:none;background:var(--card);border:1.5px solid var(--line);border-radius:20px;padding:12px;box-shadow:0 12px 40px #0004}
@@ -111,6 +112,15 @@ button.chip{font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var
 #cprev img{width:54px;height:76px;object-fit:cover;border-radius:10px;background:#000}
 #cprev div{font-size:13px;color:var(--mute);line-height:1.5}
 .up{display:flex;margin:0 0 8px}.up label{flex:1;cursor:pointer;min-height:44px;font-size:14px}
+#cbox #cnote{min-height:56px;border-top:1px solid var(--line);font-size:15px}
+.langbar{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+.langbar button{font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--mute);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 14px}
+.langbar button[aria-pressed=true]{color:#fff;background:var(--btn);border-color:transparent}
+html:lang(hi) body{font-family:'Noto Sans Devanagari',Sora,system-ui,sans-serif}
+html[dir=rtl] body{font-family:'Noto Sans Arabic',Sora,system-ui,sans-serif}
+html:lang(hi) *,html[dir=rtl] *{letter-spacing:0!important}
+html:lang(hi) h1,html[dir=rtl] h1{line-height:1.4}
+html[dir=rtl] .pill{margin-top:22px}
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-Y4V4S9SC14"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y4V4S9SC14');</script>
@@ -119,6 +129,7 @@ button.chip{font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var
 <main>
   <div class="top"><img src="/glass-192.png" alt=""><span>Reel<b>Saver</b></span><button id="install" class="inst" type="button">Install app</button></div>
 
+  <div class="langbar" id="langbar" role="group" aria-label="Language"></div>
   <span class="pill">Free · No signup · Fast</span>
   <h1>Save any reel in <em>best quality</em></h1>
   <p class="sub">Paste an Instagram link and get the video, photos, cover image, caption and hashtags in seconds.</p>
@@ -143,6 +154,8 @@ button.chip{font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var
     <div class="up"><label class="btn ghost" for="cfile">Or upload a video from your phone</label><input id="cfile" type="file" accept="video/*" hidden></div>
     <div id="cprev"></div>
     <textarea id="ctext" maxlength="800" placeholder="Caption (filled in automatically, or type your own)…" aria-label="Caption"></textarea>
+    <textarea id="cnote" maxlength="300" rows="2" placeholder="Extra instructions (optional), e.g. short, in Hindi, mention the music" aria-label="Extra instructions"></textarea>
+    <div id="cideas" class="chips" style="margin:2px 4px 8px"></div>
     <div id="ctones" role="group" aria-label="Tone"></div>
     <button class="btn" id="cgo" type="button" style="width:100%">Analyze &amp; write comments</button>
   </div>
@@ -188,7 +201,7 @@ button.chip{font:inherit;font-size:12px;font-weight:600;cursor:pointer;color:var
   </div>
 
   <footer>Only download content you own or have permission to use. ReelSaver is not affiliated with Instagram. Private accounts are not supported.
-    <nav class="flinks"><a href="/guides.html">Guides</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Use</a><a href="/dmca.html">Copyright</a><a href="/contact.html">Contact</a></nav></footer>
+    <nav class="flinks"><a href="/guides.html">Guides</a><a href="/about.html">About</a><a href="/privacy.html">Privacy Policy</a><a href="/terms.html">Terms of Use</a><a href="/dmca.html">Copyright</a><a href="/contact.html">Contact</a><a href="#" id="fixapp">Update app</a></nav></footer>
 </main>
 <div id="sheet" role="dialog" aria-modal="true" aria-label="Install ReelSaver">
   <div class="sh"><h3>Install ReelSaver</h3><ol id="sheetBody"></ol><button class="btn" id="sheetClose" type="button">Got it</button></div>
@@ -401,7 +414,7 @@ async function runComments(){
     } else if (useUp) { frames = upFrames; prev = frames[0]; }
     else showPrev('');
     say('Writing comments…');
-    const r2 = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: text || (useUp ? 'A video from my phone.' : 'No caption.'), tone, imageUrl, frames }) });
+    const r2 = await fetch('/api/comments', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: text || (useUp ? 'A video from my phone.' : 'No caption.'), tone, imageUrl, frames, note: $('cnote').value.trim() }) });
     const d2 = await r2.json(); if (!r2.ok) throw new Error(d2.error || 'Something went wrong.');
     track('comments_generated', { tone, frames: d2.frames || 0 }); box.innerHTML = '';
     if (isLink || useUp) showPrev(prev, owner, d2.imageUsed ? (d2.frames > 1 ? 'Watched ' + d2.frames + ' frames' : 'Image') : 'none', useUp ? upName : '');
@@ -411,6 +424,11 @@ async function runComments(){
   $('cgo').disabled = false;
 }
 $('cgo').onclick = runComments;
+['Shorter', 'Ask a question', 'Mention the music', 'No emojis', 'In English', 'In Hindi', 'In Urdu', 'In Arabic'].forEach(t => {
+  const b = el('button', { className: 'chip', type: 'button', textContent: '+ ' + t });
+  b.onclick = () => { const n = $('cnote'), w = tr(t); if (!n.value.toLowerCase().includes(w.toLowerCase())) n.value = (n.value ? n.value.replace(/[.\s]+$/, '') + '. ' : '') + w; n.focus(); };
+  $('cideas').append(b);
+});
 $('cpaste').onclick = async () => { try { $('clink').value = await navigator.clipboard.readText(); runComments(); } catch { $('clink').focus(); say('Long-press the box and choose Paste.'); } };
 $('clink').addEventListener('paste', () => setTimeout(() => { upFrames = []; if (IGRE.test($('clink').value)) runComments(); }, 80));
 const SKEY = 'rs_stories_recent';
@@ -427,21 +445,106 @@ $('sresult').addEventListener('click', e => { const a = e.target.closest('a.btn'
 const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone;
 const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 let dp;
-addEventListener('beforeinstallprompt', e => { e.preventDefault(); dp = e; });
+addEventListener('beforeinstallprompt', e => { e.preventDefault(); window.__dp = e; });
 function hideInstall(){ document.querySelectorAll('.inst').forEach(b => b.style.display = 'none'); const c = document.querySelector('.appcard'); if (c) c.style.display = 'none'; }
 addEventListener('appinstalled', () => { hideInstall(); track('app_installed'); });
 if (standalone) hideInstall();
 async function installApp(){
   track('install_click');
-  if (dp) { dp.prompt(); const c = await dp.userChoice; dp = null; if (c.outcome === 'accepted') hideInstall(); return; }
-  $('sheetBody').innerHTML = isIOS
-    ? '<li>Open this page in <b>Safari</b>.</li><li>Tap the <b>Share</b> button (square with an arrow).</li><li>Choose <b>Add to Home Screen</b>.</li><li>Tap <b>Add</b>.</li>'
-    : '<li>Tap the <b>⋮ menu</b> in Chrome.</li><li>Tap <b>Install app</b> (or <b>Add to Home screen</b>).</li><li>Tap <b>Install</b>.</li>';
+  const dp = window.__dp;
+  if (dp) { dp.prompt(); const c = await dp.userChoice; window.__dp = null; if (c.outcome === 'accepted') hideInstall(); return; }
+  const IOS = ['Open this page in <b>Safari</b>.', 'Tap the <b>Share</b> button (square with an arrow).', 'Choose <b>Add to Home Screen</b>.', 'Tap <b>Add</b>.'];
+  const AND = ['Tap the <b>⋮ menu</b> in Chrome.', 'Tap <b>Install app</b> (or <b>Add to Home screen</b>).', 'Tap <b>Install</b>.'];
+  $('sheetBody').innerHTML = (isIOS ? IOS : AND).map(x => '<li>' + tr(x) + '</li>').join('');
   $('sheet').style.display = 'flex';
 }
 $('install').onclick = installApp; $('install2').onclick = installApp;
 $('sheet').onclick = e => { if (e.target.id === 'sheet' || e.target.id === 'sheetClose') $('sheet').style.display = 'none'; };
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js');
+
+// ---------- languages ----------
+const LANGS = { en: ['English', 'ltr'], hi: ['हिन्दी', 'ltr'], ur: ['اردو', 'rtl'], ar: ['العربية', 'rtl'] };
+const D = {"Install app": {"hi": "ऐप इंस्टॉल करें", "ur": "ایپ انسٹال کریں", "ar": "تثبيت التطبيق"}, "Free · No signup · Fast": {"hi": "मुफ़्त · साइनअप नहीं · तेज़", "ur": "مفت · سائن اپ نہیں · تیز", "ar": "مجاني · بدون تسجيل · سريع"}, "Save any reel in": {"hi": "कोई भी रील सेव करें", "ur": "کوئی بھی ریل محفوظ کریں", "ar": "احفظ أي ريل"}, "best quality": {"hi": "बेहतरीन क्वालिटी में", "ur": "بہترین کوالٹی میں", "ar": "بأفضل جودة"}, "Paste an Instagram link and get the video, photos, cover image, caption and hashtags in seconds.": {"hi": "Instagram लिंक पेस्ट करें और कुछ ही सेकंड में वीडियो, फ़ोटो, कवर इमेज, कैप्शन और हैशटैग पाएँ।", "ur": "انسٹاگرام کا لنک پیسٹ کریں اور چند سیکنڈ میں ویڈیو، تصاویر، کور امیج، کیپشن اور ہیش ٹیگ حاصل کریں۔", "ar": "الصق رابط إنستغرام واحصل على الفيديو والصور وصورة الغلاف والوصف والهاشتاغات في ثوانٍ."}, "Reels & Posts": {"hi": "रील और पोस्ट", "ur": "ریلز اور پوسٹس", "ar": "الريلز والمنشورات"}, "Stories": {"hi": "स्टोरी", "ur": "اسٹوریز", "ar": "القصص"}, "Comments": {"hi": "कमेंट", "ur": "کمنٹس", "ar": "التعليقات"}, "Paste": {"hi": "पेस्ट", "ur": "پیسٹ", "ar": "لصق"}, "Save": {"hi": "सेव", "ur": "محفوظ کریں", "ar": "حفظ"}, "Get stories": {"hi": "स्टोरी पाएँ", "ur": "اسٹوریز حاصل کریں", "ar": "احصل على القصص"}, "Or upload a video from your phone": {"hi": "या अपने फ़ोन से वीडियो अपलोड करें", "ur": "یا اپنے فون سے ویڈیو اپ لوڈ کریں", "ar": "أو ارفع فيديو من هاتفك"}, "Shorter": {"hi": "छोटा", "ur": "مختصر", "ar": "أقصر"}, "Ask a question": {"hi": "सवाल पूछें", "ur": "سوال پوچھیں", "ar": "اطرح سؤالاً"}, "Mention the music": {"hi": "म्यूज़िक का ज़िक्र करें", "ur": "میوزک کا ذکر کریں", "ar": "اذكر الموسيقى"}, "No emojis": {"hi": "इमोजी नहीं", "ur": "ایموجی نہیں", "ar": "بدون إيموجي"}, "In English": {"hi": "अंग्रेज़ी में", "ur": "انگریزی میں", "ar": "بالإنجليزية"}, "In Hindi": {"hi": "हिंदी में", "ur": "ہندی میں", "ar": "بالهندية"}, "In Urdu": {"hi": "उर्दू में", "ur": "اردو میں", "ar": "بالأردية"}, "In Arabic": {"hi": "अरबी में", "ur": "عربی میں", "ar": "بالعربية"}, "Friendly": {"hi": "दोस्ताना", "ur": "دوستانہ", "ar": "ودّي"}, "Funny": {"hi": "मज़ेदार", "ur": "مزاحیہ", "ar": "طريف"}, "Supportive": {"hi": "हौसला बढ़ाने वाला", "ur": "حوصلہ افزا", "ar": "مشجّع"}, "Professional": {"hi": "प्रोफ़ेशनल", "ur": "پیشہ ورانہ", "ar": "احترافي"}, "Short + emoji": {"hi": "छोटा + इमोजी", "ur": "مختصر + ایموجی", "ar": "قصير + إيموجي"}, "Analyze & write comments": {"hi": "देखें और कमेंट लिखें", "ur": "دیکھیں اور کمنٹس لکھیں", "ar": "حلّل واكتب التعليقات"}, "Find the account": {"hi": "अकाउंट ढूँढें", "ur": "اکاؤنٹ تلاش کریں", "ar": "ابحث عن الحساب"}, "Open it on Instagram. A colored ring around the profile picture means it has a story.": {"hi": "Instagram पर उसे खोलें। प्रोफ़ाइल फ़ोटो के चारों ओर रंगीन घेरा हो तो उसकी स्टोरी है।", "ur": "اسے انسٹاگرام پر کھولیں۔ پروفائل تصویر کے گرد رنگین دائرہ ہو تو اس کی اسٹوری موجود ہے۔", "ar": "افتحه على إنستغرام. وجود حلقة ملونة حول الصورة الشخصية يعني أن لديه قصة."}, "Copy the username": {"hi": "यूज़रनेम कॉपी करें", "ur": "یوزر نیم کاپی کریں", "ar": "انسخ اسم المستخدم"}, "Copy the name under the picture, or copy the profile link.": {"hi": "फ़ोटो के नीचे लिखा नाम कॉपी करें, या प्रोफ़ाइल का लिंक कॉपी करें।", "ur": "تصویر کے نیچے لکھا نام کاپی کریں، یا پروفائل کا لنک کاپی کریں۔", "ar": "انسخ الاسم الظاهر تحت الصورة، أو انسخ رابط الملف الشخصي."}, "Paste it here": {"hi": "यहाँ पेस्ट करें", "ur": "یہاں پیسٹ کریں", "ar": "الصقه هنا"}, "Tap Paste, then Get stories. Tap Download under each story.": {"hi": "\"पेस्ट\" दबाएँ, फिर \"स्टोरी पाएँ\"। हर स्टोरी के नीचे \"डाउनलोड\" दबाएँ।", "ur": "\"پیسٹ\" دبائیں، پھر \"اسٹوریز حاصل کریں\"۔ ہر اسٹوری کے نیچے \"ڈاؤن لوڈ\" دبائیں۔", "ar": "اضغط \"لصق\" ثم \"احصل على القصص\". اضغط \"تنزيل\" أسفل كل قصة."}, "Copy caption": {"hi": "कैप्शन कॉपी करें", "ur": "کیپشن کاپی کریں", "ar": "انسخ الوصف"}, "Copy hashtags": {"hi": "हैशटैग कॉपी करें", "ur": "ہیش ٹیگ کاپی کریں", "ar": "انسخ الهاشتاغات"}, "Recent": {"hi": "हाल के", "ur": "حالیہ", "ar": "الأخيرة"}, "Clear history": {"hi": "हिस्ट्री साफ़ करें", "ur": "ہسٹری صاف کریں", "ar": "مسح السجل"}, "How it works": {"hi": "यह कैसे काम करता है", "ur": "یہ کیسے کام کرتا ہے", "ar": "كيف يعمل"}, "Copy the link": {"hi": "लिंक कॉपी करें", "ur": "لنک کاپی کریں", "ar": "انسخ الرابط"}, "Open Instagram, tap Share on a reel or post, then Copy link.": {"hi": "Instagram खोलें, रील या पोस्ट पर शेयर दबाएँ, फिर \"लिंक कॉपी करें\" चुनें।", "ur": "انسٹاگرام کھولیں، ریل یا پوسٹ پر شیئر دبائیں، پھر \"لنک کاپی کریں\" منتخب کریں۔", "ar": "افتح إنستغرام، واضغط على مشاركة في الريل أو المنشور، ثم اختر \"نسخ الرابط\"."}, "Tap Paste, then Save.": {"hi": "\"पेस्ट\" दबाएँ, फिर \"सेव\"।", "ur": "\"پیسٹ\" دبائیں، پھر \"محفوظ کریں\"۔", "ar": "اضغط \"لصق\" ثم \"حفظ\"."}, "Download": {"hi": "डाउनलोड", "ur": "ڈاؤن لوڈ", "ar": "تنزيل"}, "Save the video, photos or cover image to your phone.": {"hi": "वीडियो, फ़ोटो या कवर इमेज अपने फ़ोन में सेव करें।", "ur": "ویڈیو، تصاویر یا کور امیج اپنے فون میں محفوظ کریں۔", "ar": "احفظ الفيديو أو الصور أو صورة الغلاف على هاتفك."}, "Why ReelSaver": {"hi": "ReelSaver क्यों", "ur": "ReelSaver کیوں", "ar": "لماذا ReelSaver"}, "Original quality": {"hi": "असली क्वालिटी", "ur": "اصل کوالٹی", "ar": "الجودة الأصلية"}, "Always the highest quality Instagram provides.": {"hi": "हमेशा वही सबसे अच्छी क्वालिटी जो Instagram देता है।", "ur": "ہمیشہ وہی بہترین کوالٹی جو انسٹاگرام فراہم کرتا ہے۔", "ar": "دائماً أعلى جودة يوفرها إنستغرام."}, "Photos and carousels": {"hi": "फ़ोटो और कैरोसेल", "ur": "تصاویر اور کیروسل", "ar": "الصور والألبومات"}, "Save every picture, one by one or all at once.": {"hi": "हर फ़ोटो एक-एक करके या सब एक साथ सेव करें।", "ur": "ہر تصویر ایک ایک کر کے یا سب ایک ساتھ محفوظ کریں۔", "ar": "احفظ كل صورة على حدة أو الكل دفعة واحدة."}, "Cover images": {"hi": "कवर इमेज", "ur": "کور امیجز", "ar": "صور الغلاف"}, "Grab the thumbnail of any reel.": {"hi": "किसी भी रील का थंबनेल पाएँ।", "ur": "کسی بھی ریل کا تھمب نیل حاصل کریں۔", "ar": "احصل على الصورة المصغّرة لأي ريل."}, "Install as an app": {"hi": "ऐप की तरह इंस्टॉल करें", "ur": "ایپ کی طرح انسٹال کریں", "ar": "ثبّته كتطبيق"}, "Works from your home screen, no store needed.": {"hi": "होम स्क्रीन से चलता है, किसी ऐप स्टोर की ज़रूरत नहीं।", "ur": "ہوم اسکرین سے چلتی ہے، کسی ایپ اسٹور کی ضرورت نہیں۔", "ar": "يعمل من الشاشة الرئيسية دون الحاجة إلى متجر تطبيقات."}, "Get the ReelSaver app": {"hi": "ReelSaver ऐप पाएँ", "ur": "ReelSaver ایپ حاصل کریں", "ar": "احصل على تطبيق ReelSaver"}, "Add it to your home screen. It opens instantly, with no app store.": {"hi": "इसे होम स्क्रीन पर जोड़ें। यह तुरंत खुलता है, ऐप स्टोर के बिना।", "ur": "اسے ہوم اسکرین پر شامل کریں۔ یہ فوراً کھلتی ہے، ایپ اسٹور کے بغیر۔", "ar": "أضفه إلى شاشتك الرئيسية. يفتح فوراً ودون متجر تطبيقات."}, "Install": {"hi": "इंस्टॉल", "ur": "انسٹال", "ar": "تثبيت"}, "Only download content you own or have permission to use. ReelSaver is not affiliated with Instagram. Private accounts are not supported.": {"hi": "सिर्फ़ वही कंटेंट डाउनलोड करें जो आपका हो या जिसके इस्तेमाल की आपको अनुमति हो। ReelSaver का Instagram से कोई संबंध नहीं है। प्राइवेट अकाउंट सपोर्ट नहीं किए जाते।", "ur": "صرف وہی مواد ڈاؤن لوڈ کریں جو آپ کا اپنا ہو یا جسے استعمال کرنے کی آپ کے پاس اجازت ہو۔ ReelSaver کا انسٹاگرام سے کوئی تعلق نہیں ہے۔ پرائیویٹ اکاؤنٹس سپورٹ نہیں کیے جاتے۔", "ar": "نزّل فقط المحتوى الذي تملكه أو لديك إذن باستخدامه. ReelSaver ليس تابعاً لإنستغرام. الحسابات الخاصة غير مدعومة."}, "Guides": {"hi": "गाइड", "ur": "گائیڈز", "ar": "الأدلة"}, "About": {"hi": "हमारे बारे में", "ur": "ہمارے بارے میں", "ar": "من نحن"}, "Privacy Policy": {"hi": "प्राइवेसी पॉलिसी", "ur": "پرائیویسی پالیسی", "ar": "سياسة الخصوصية"}, "Terms of Use": {"hi": "इस्तेमाल की शर्तें", "ur": "استعمال کی شرائط", "ar": "شروط الاستخدام"}, "Copyright": {"hi": "कॉपीराइट", "ur": "کاپی رائٹ", "ar": "حقوق النشر"}, "Contact": {"hi": "संपर्क", "ur": "رابطہ", "ar": "اتصل بنا"}, "Update app": {"hi": "ऐप अपडेट करें", "ur": "ایپ اپ ڈیٹ کریں", "ar": "تحديث التطبيق"}, "Install ReelSaver": {"hi": "ReelSaver इंस्टॉल करें", "ur": "ReelSaver انسٹال کریں", "ar": "تثبيت ReelSaver"}, "Got it": {"hi": "ठीक है", "ur": "ٹھیک ہے", "ar": "حسناً"}, "Language": {"hi": "भाषा", "ur": "زبان", "ar": "اللغة"}, "Paste Instagram link…": {"hi": "Instagram लिंक पेस्ट करें…", "ur": "انسٹاگرام لنک پیسٹ کریں…", "ar": "الصق رابط إنستغرام…"}, "Instagram link": {"hi": "Instagram लिंक", "ur": "انسٹاگرام لنک", "ar": "رابط إنستغرام"}, "Username or profile link": {"hi": "यूज़रनेम या प्रोफ़ाइल लिंक", "ur": "یوزر نیم یا پروفائل لنک", "ar": "اسم المستخدم أو رابط الملف الشخصي"}, "Instagram username or profile link": {"hi": "Instagram यूज़रनेम या प्रोफ़ाइल लिंक", "ur": "انسٹاگرام یوزر نیم یا پروفائل لنک", "ar": "اسم مستخدم إنستغرام أو رابط الملف الشخصي"}, "Paste reel or post link": {"hi": "रील या पोस्ट का लिंक पेस्ट करें", "ur": "ریل یا پوسٹ کا لنک پیسٹ کریں", "ar": "الصق رابط ريل أو منشور"}, "Reel or post link": {"hi": "रील या पोस्ट का लिंक", "ur": "ریل یا پوسٹ کا لنک", "ar": "رابط ريل أو منشور"}, "Caption (filled in automatically, or type your own)…": {"hi": "कैप्शन (अपने आप भर जाएगा, या खुद लिखें)…", "ur": "کیپشن (خود بخود بھر جائے گا، یا خود لکھیں)…", "ar": "الوصف (يُملأ تلقائياً، أو اكتب وصفك)…"}, "Caption": {"hi": "कैप्शन", "ur": "کیپشن", "ar": "الوصف"}, "Extra instructions (optional), e.g. short, in Hindi, mention the music": {"hi": "अतिरिक्त निर्देश (वैकल्पिक), जैसे छोटा, हिंदी में, म्यूज़िक का ज़िक्र", "ur": "اضافی ہدایات (اختیاری)، جیسے مختصر، ہندی میں، میوزک کا ذکر", "ar": "تعليمات إضافية (اختيارية)، مثل: قصير، بالهندية، اذكر الموسيقى"}, "Extra instructions": {"hi": "अतिरिक्त निर्देश", "ur": "اضافی ہدایات", "ar": "تعليمات إضافية"}, "Tone": {"hi": "टोन", "ur": "انداز", "ar": "النبرة"}, "Copied ✓": {"hi": "कॉपी हो गया ✓", "ur": "کاپی ہو گیا ✓", "ar": "تم النسخ ✓"}, "Copy": {"hi": "कॉपी", "ur": "کاپی", "ar": "نسخ"}, "Copy failed. Select the text manually.": {"hi": "कॉपी नहीं हुआ। टेक्स्ट खुद चुनकर कॉपी करें।", "ur": "کاپی نہیں ہوا۔ متن خود منتخب کر کے کاپی کریں۔", "ar": "تعذّر النسخ. حدّد النص يدوياً."}, "Could not read that video here. Try another file, or paste a link.": {"hi": "यह वीडियो यहाँ पढ़ा नहीं जा सका। दूसरी फ़ाइल आज़माएँ, या लिंक पेस्ट करें।", "ur": "یہ ویڈیو یہاں پڑھی نہیں جا سکی۔ دوسری فائل آزمائیں، یا لنک پیسٹ کریں۔", "ar": "تعذّرت قراءة هذا الفيديو هنا. جرّب ملفاً آخر أو الصق رابطاً."}, "Cover": {"hi": "कवर", "ur": "کور", "ar": "الغلاف"}, "Download started ✓": {"hi": "डाउनलोड शुरू हो गया ✓", "ur": "ڈاؤن لوڈ شروع ہو گیا ✓", "ar": "بدأ التنزيل ✓"}, "Downloading…": {"hi": "डाउनलोड हो रहा है…", "ur": "ڈاؤن لوڈ ہو رہا ہے…", "ar": "جارٍ التنزيل…"}, "Long-press the box and choose Paste.": {"hi": "बॉक्स को देर तक दबाएँ और \"पेस्ट\" चुनें।", "ur": "باکس کو دیر تک دبائیں اور \"پیسٹ\" منتخب کریں۔", "ar": "اضغط مطولاً على الحقل واختر \"لصق\"."}, "Looking at the post…": {"hi": "पोस्ट देख रहे हैं…", "ur": "پوسٹ دیکھ رہے ہیں…", "ar": "جارٍ فحص المنشور…"}, "Paste a reel or post link, upload a video, or type the caption first.": {"hi": "पहले रील या पोस्ट का लिंक पेस्ट करें, वीडियो अपलोड करें, या कैप्शन लिखें।", "ur": "پہلے ریل یا پوسٹ کا لنک پیسٹ کریں، ویڈیو اپ لوڈ کریں، یا کیپشن لکھیں۔", "ar": "الصق رابط ريل أو منشور أولاً، أو ارفع فيديو، أو اكتب الوصف."}, "Paste an Instagram link first.": {"hi": "पहले Instagram लिंक पेस्ट करें।", "ur": "پہلے انسٹاگرام لنک پیسٹ کریں۔", "ar": "الصق رابط إنستغرام أولاً."}, "Reading your video…": {"hi": "आपका वीडियो पढ़ रहे हैं…", "ur": "آپ کی ویڈیو پڑھ رہے ہیں…", "ar": "جارٍ قراءة الفيديو…"}, "Tap Download under a story to save it to your phone.": {"hi": "स्टोरी फ़ोन में सेव करने के लिए उसके नीचे \"डाउनलोड\" दबाएँ।", "ur": "اسٹوری فون میں محفوظ کرنے کے لیے اس کے نیچے \"ڈاؤن لوڈ\" دبائیں۔", "ar": "اضغط \"تنزيل\" أسفل القصة لحفظها على هاتفك."}, "Type an Instagram username first.": {"hi": "पहले Instagram यूज़रनेम लिखें।", "ur": "پہلے انسٹاگرام یوزر نیم لکھیں۔", "ar": "اكتب اسم مستخدم إنستغرام أولاً."}, "Updating the app…": {"hi": "ऐप अपडेट हो रहा है…", "ur": "ایپ اپ ڈیٹ ہو رہی ہے…", "ar": "جارٍ تحديث التطبيق…"}, "Watching the reel…": {"hi": "रील देख रहे हैं…", "ur": "ریل دیکھ رہے ہیں…", "ar": "جارٍ مشاهدة الريل…"}, "Writing comments…": {"hi": "कमेंट लिख रहे हैं…", "ur": "کمنٹس لکھ رہے ہیں…", "ar": "جارٍ كتابة التعليقات…"}, "Download video": {"hi": "वीडियो डाउनलोड करें", "ur": "ویڈیو ڈاؤن لوڈ کریں", "ar": "تنزيل الفيديو"}, "Save photo": {"hi": "फ़ोटो सेव करें", "ur": "تصویر محفوظ کریں", "ar": "حفظ الصورة"}, "Video": {"hi": "वीडियो", "ur": "ویڈیو", "ar": "فيديو"}, "Photo": {"hi": "फ़ोटो", "ur": "تصویر", "ar": "صورة"}, "No caption.": {"hi": "कोई कैप्शन नहीं।", "ur": "کوئی کیپشن نہیں۔", "ar": "لا يوجد وصف."}, "Write comments for this reel": {"hi": "इस रील के लिए कमेंट लिखें", "ur": "اس ریل کے لیے کمنٹس لکھیں", "ar": "اكتب تعليقات لهذا الريل"}, "Public accounts only. Stories disappear after 24 hours.": {"hi": "सिर्फ़ पब्लिक अकाउंट। स्टोरी 24 घंटे बाद गायब हो जाती है।", "ur": "صرف پبلک اکاؤنٹس۔ اسٹوریز 24 گھنٹے بعد غائب ہو جاتی ہیں۔", "ar": "الحسابات العامة فقط. تختفي القصص بعد 24 ساعة."}, "AI writes 5 comment ideas. Post them yourself, in your own words if you like.": {"hi": "AI 5 कमेंट आइडिया लिखता है। उन्हें खुद पोस्ट करें, चाहें तो अपने शब्दों में।", "ur": "AI 5 کمنٹ آئیڈیاز لکھتا ہے۔ انہیں خود پوسٹ کریں، چاہیں تو اپنے الفاظ میں۔", "ar": "يكتب الذكاء الاصطناعي 5 أفكار للتعليقات. انشرها بنفسك، وبكلماتك إن شئت."}, "Tip: only profiles with a colored ring around the picture have a story.": {"hi": "टिप: सिर्फ़ उन्हीं प्रोफ़ाइल की स्टोरी होती है जिनकी फ़ोटो के चारों ओर रंगीन घेरा हो।", "ur": "ٹپ: صرف ان پروفائلز کی اسٹوری ہوتی ہے جن کی تصویر کے گرد رنگین دائرہ ہو۔", "ar": "نصيحة: فقط الحسابات التي حول صورتها حلقة ملونة لديها قصة."}, "Paste a public Instagram reel or post link.": {"hi": "किसी पब्लिक Instagram रील या पोस्ट का लिंक पेस्ट करें।", "ur": "کسی پبلک انسٹاگرام ریل یا پوسٹ کا لنک پیسٹ کریں۔", "ar": "الصق رابط ريل أو منشور عام على إنستغرام."}, "No media found. The post may be private or deleted.": {"hi": "कोई मीडिया नहीं मिला। हो सकता है पोस्ट प्राइवेट हो या हटा दी गई हो।", "ur": "کوئی میڈیا نہیں ملا۔ ہو سکتا ہے پوسٹ پرائیویٹ ہو یا ہٹا دی گئی ہو۔", "ar": "لم يتم العثور على وسائط. قد يكون المنشور خاصاً أو محذوفاً."}, "Could not fetch this post right now. Try again in a moment.": {"hi": "अभी यह पोस्ट नहीं मिल पाई। थोड़ी देर में फिर कोशिश करें।", "ur": "ابھی یہ پوسٹ نہیں مل سکی۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔", "ar": "تعذّر جلب هذا المنشور الآن. حاول مرة أخرى بعد قليل."}, "Type a valid Instagram username, like natgeo.": {"hi": "सही Instagram यूज़रनेम लिखें, जैसे natgeo।", "ur": "درست انسٹاگرام یوزر نیم لکھیں، جیسے natgeo۔", "ar": "اكتب اسم مستخدم إنستغرام صحيحاً، مثل natgeo."}, "No active stories right now. The account may be private or has no story.": {"hi": "अभी कोई चालू स्टोरी नहीं है। अकाउंट प्राइवेट हो सकता है या उसकी कोई स्टोरी नहीं है।", "ur": "ابھی کوئی فعال اسٹوری نہیں ہے۔ اکاؤنٹ پرائیویٹ ہو سکتا ہے یا اس کی کوئی اسٹوری نہیں۔", "ar": "لا توجد قصص نشطة الآن. قد يكون الحساب خاصاً أو بلا قصص."}, "Could not load stories right now. Try again in a moment.": {"hi": "अभी स्टोरी लोड नहीं हो सकीं। थोड़ी देर में फिर कोशिश करें।", "ur": "ابھی اسٹوریز لوڈ نہیں ہو سکیں۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔", "ar": "تعذّر تحميل القصص الآن. حاول مرة أخرى بعد قليل."}, "Paste a reel or post link, or type the caption, first.": {"hi": "पहले रील या पोस्ट का लिंक पेस्ट करें, या कैप्शन लिखें।", "ur": "پہلے ریل یا پوسٹ کا لنک پیسٹ کریں، یا کیپشن لکھیں۔", "ar": "الصق رابط ريل أو منشور أولاً، أو اكتب الوصف."}, "Comments are at capacity for today. Please try again tomorrow.": {"hi": "आज के लिए कमेंट की सीमा पूरी हो गई। कृपया कल फिर कोशिश करें।", "ur": "آج کے لیے کمنٹس کی حد پوری ہو گئی۔ براہِ کرم کل دوبارہ کوشش کریں۔", "ar": "وصلت التعليقات إلى حدّها اليوم. يرجى المحاولة غداً."}, "The comment writer is busy right now. Try again in a minute.": {"hi": "कमेंट लिखने वाला अभी व्यस्त है। एक मिनट बाद फिर कोशिश करें।", "ur": "کمنٹ لکھنے والا ابھی مصروف ہے۔ ایک منٹ بعد دوبارہ کوشش کریں۔", "ar": "كاتب التعليقات مشغول الآن. حاول بعد دقيقة."}, "Could not write comments right now. Try again in a moment.": {"hi": "अभी कमेंट नहीं लिखे जा सके। थोड़ी देर में फिर कोशिश करें।", "ur": "ابھی کمنٹس نہیں لکھے جا سکے۔ تھوڑی دیر بعد دوبارہ کوشش کریں۔", "ar": "تعذّرت كتابة التعليقات الآن. حاول مرة أخرى بعد قليل."}, "Image and caption analysed": {"hi": "इमेज और कैप्शन देखे गए", "ur": "تصویر اور کیپشن دیکھے گئے", "ar": "تم تحليل الصورة والوصف"}, "Image not read, caption only": {"hi": "इमेज नहीं पढ़ी जा सकी, सिर्फ़ कैप्शन", "ur": "تصویر نہیں پڑھی جا سکی، صرف کیپشن", "ar": "تعذّرت قراءة الصورة، الوصف فقط"}, "Reading the post…": {"hi": "पोस्ट पढ़ रहे हैं…", "ur": "پوسٹ پڑھ رہے ہیں…", "ar": "جارٍ قراءة المنشور…"}, "ReelSaver – Instagram Reel Downloader": {"hi": "ReelSaver – Instagram रील डाउनलोडर", "ur": "ReelSaver – انسٹاگرام ریل ڈاؤن لوڈر", "ar": "ReelSaver – تنزيل ريلز إنستغرام"}, "Open this page in <b>Safari</b>.": {"hi": "इस पेज को <b>Safari</b> में खोलें।", "ur": "اس صفحے کو <b>Safari</b> میں کھولیں۔", "ar": "افتح هذه الصفحة في <b>Safari</b>."}, "Tap the <b>Share</b> button (square with an arrow).": {"hi": "<b>Share</b> बटन दबाएँ (तीर वाला चौकोर)।", "ur": "<b>Share</b> بٹن دبائیں (تیر والا چوکور)۔", "ar": "اضغط زر <b>Share</b> (مربع بسهم)."}, "Choose <b>Add to Home Screen</b>.": {"hi": "<b>Add to Home Screen</b> चुनें।", "ur": "<b>Add to Home Screen</b> منتخب کریں۔", "ar": "اختر <b>Add to Home Screen</b>."}, "Tap <b>Add</b>.": {"hi": "<b>Add</b> दबाएँ।", "ur": "<b>Add</b> دبائیں۔", "ar": "اضغط <b>Add</b>."}, "Tap the <b>⋮ menu</b> in Chrome.": {"hi": "Chrome में <b>⋮ मेन्यू</b> दबाएँ।", "ur": "Chrome میں <b>⋮ مینو</b> دبائیں۔", "ar": "اضغط على <b>قائمة ⋮</b> في Chrome."}, "Tap <b>Install app</b> (or <b>Add to Home screen</b>).": {"hi": "<b>Install app</b> (या <b>Add to Home screen</b>) दबाएँ।", "ur": "<b>Install app</b> (یا <b>Add to Home screen</b>) دبائیں۔", "ar": "اضغط <b>Install app</b> (أو <b>Add to Home screen</b>)."}, "Tap <b>Install</b>.": {"hi": "<b>Install</b> दबाएँ।", "ur": "<b>Install</b> دبائیں۔", "ar": "اضغط <b>Install</b>."}};
+const RULES = [[/^(\d+) free saves left today\.$/, {"hi": "आज $1 मुफ़्त सेव बचे हैं।", "ur": "آج $1 مفت ڈاؤن لوڈ باقی ہیں۔", "ar": "تبقّى $1 عمليات حفظ مجانية اليوم."}],
+  [/^(\d+) free comment sets left today\.$/, {"hi": "आज $1 मुफ़्त कमेंट सेट बचे हैं।", "ur": "آج $1 مفت کمنٹ سیٹ باقی ہیں۔", "ar": "تبقّى $1 مجموعات تعليقات مجانية اليوم."}],
+  [/^Daily free limit of (\d+) reached\..*$/, {"hi": "रोज़ की $1 मुफ़्त सीमा पूरी हो गई। कल फिर आएँ।", "ur": "روزانہ کی $1 مفت حد پوری ہو گئی۔ کل دوبارہ آئیں۔", "ar": "تم بلوغ الحد المجاني اليومي ($1). عُد غداً."}],
+  [/^Daily limit of (\d+) comment sets reached\..*$/, {"hi": "रोज़ की $1 कमेंट सेट की सीमा पूरी हो गई। कल फिर आएँ।", "ur": "روزانہ $1 کمنٹ سیٹس کی حد پوری ہو گئی۔ کل دوبارہ آئیں۔", "ar": "تم بلوغ الحد اليومي لمجموعات التعليقات ($1). عُد غداً."}],
+  [/^(\d+) active stor(?:y|ies)$/, {"hi": "$1 चालू स्टोरी", "ur": "$1 فعال اسٹوریز", "ar": "$1 قصص نشطة"}],
+  [/^Expires in (.+)$/, {"hi": "ख़त्म होने में $1", "ur": "ختم ہونے میں $1", "ar": "تنتهي خلال $1"}],
+  [/^Posted (.+) ago$/, {"hi": "पोस्ट किया: $1 पहले", "ur": "پوسٹ کیے $1 پہلے", "ar": "نُشرت منذ $1"}],
+  [/^(\d+) frames ready\. Tap Analyze & write comments\.$/, {"hi": "$1 फ़्रेम तैयार। \"देखें और कमेंट लिखें\" दबाएँ।", "ur": "$1 فریمز تیار ہیں۔ \"دیکھیں اور کمنٹس لکھیں\" دبائیں۔", "ar": "جاهز $1 إطارات. اضغط \"حلّل واكتب التعليقات\"."}],
+  [/^Watched (\d+) frames and caption analysed$/, {"hi": "$1 फ़्रेम और कैप्शन देखे गए", "ur": "$1 فریمز اور کیپشن دیکھے گئے", "ar": "تمت مشاهدة $1 إطارات وتحليل الوصف"}],
+  [/^Save all (\d+)(?: photos)?$/, {"hi": "सभी $1 सेव करें", "ur": "تمام $1 محفوظ کریں", "ar": "حفظ الكل ($1)"}],
+  [/^Photo (\d+)$/, {"hi": "फ़ोटो $1", "ur": "تصویر $1", "ar": "صورة $1"}]];
+let LANG = 'en';
+function tr(s) {
+  if (LANG === 'en' || !s) return s;
+  const k = s.trim(); if (!k) return s;
+  const lead = s.match(/^\s*/)[0], trail = s.match(/\s*$/)[0];
+  const one = x => {
+    const e = D[x]; if (e && e[LANG]) return e[LANG];
+    for (const [re, o] of RULES) { const m = x.match(re); if (m) return o[LANG].replace(/\$(\d)/g, (_, i) => m[i]); }
+    if (/^(\+ |⬇ )/.test(x)) { const r = one(x.slice(2)); if (r) return x.slice(0, 2) + r; }
+    return null;
+  };
+  let out = one(k);
+  if (!out && k.includes(' · ')) { const a = k.split(' · '), b = a.map(p => one(p) || p); if (b.some((p, i) => p !== a[i])) out = b.join(' · '); }
+  if (!out) { const a = k.split(/(?<=[.!?…])\\s+/); if (a.length > 1) { const b = a.map(p => one(p) || p); if (b.some((p, i) => p !== a[i])) out = b.join(' '); } }
+  return out ? lead + out + trail : s;
+}
+const REC = new WeakMap();
+function tnode(n) {
+  const r = REC.get(n), en = r && n.textContent === r.t ? r.en : n.textContent, t = tr(en);
+  REC.set(n, { en, t }); if (t !== n.textContent) n.textContent = t;
+}
+function applyLang(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const list = []; while (w.nextNode()) { const p = w.currentNode.parentElement; if (p && !p.closest('script,style') && w.currentNode.textContent.trim()) list.push(w.currentNode); }
+  list.forEach(tnode);
+  const els = root.nodeType === 1 ? [root, ...root.querySelectorAll('[placeholder],[aria-label]')] : [];
+  els.forEach(e => ['placeholder', 'aria-label'].forEach(a => {
+    if (!e.hasAttribute(a)) return; const key = 'en' + a; if (e.dataset[key] === undefined || e.getAttribute(a) !== e.dataset['t' + a]) e.dataset[key] = e.getAttribute(a);
+    const t = tr(e.dataset[key]); e.dataset['t' + a] = t; e.setAttribute(a, t);
+  }));
+}
+const LOBS = new MutationObserver(ms => {
+  ms.forEach(m => {
+    if (m.type === 'characterData') tnode(m.target);
+    else m.addedNodes.forEach(n => { if (n.nodeType === 3) { if (n.textContent.trim()) tnode(n); } else if (n.nodeType === 1) applyLang(n); });
+  });
+  LOBS.takeRecords();
+});
+function setLang(code, save) {
+  if (!LANGS[code]) code = 'en'; LANG = code;
+  const de = document.documentElement; de.lang = code; de.dir = LANGS[code][1];
+  if (save) try { localStorage.setItem('rs_lang', code); } catch (e) {}
+  const fam = { hi: 'Noto+Sans+Devanagari:wght@400;700', ur: 'Noto+Sans+Arabic:wght@400;700', ar: 'Noto+Sans+Arabic:wght@400;700' }[code];
+  if (fam && !document.getElementById('lf-' + fam.slice(0, 12))) { const l = document.createElement('link'); l.id = 'lf-' + fam.slice(0, 12); l.rel = 'stylesheet'; l.href = 'https://fonts.googleapis.com/css2?family=' + fam + '&display=swap'; document.head.appendChild(l); }
+  [...$('langbar').children].forEach(b => b.setAttribute('aria-pressed', b.dataset.c === code));
+  applyLang(document.body); document.title = tr('ReelSaver – Instagram Reel Downloader'); LOBS.takeRecords();
+}
+Object.entries(LANGS).forEach(([c, [n]]) => { const b = el('button', { type: 'button', textContent: n, lang: c }); b.dataset.c = c; b.onclick = () => setLang(c, true); $('langbar').append(b); });
+['u', 'su', 'clink', 'ctext', 'cnote'].forEach(i => { $(i).dir = 'auto'; });
+LOBS.observe(document.body, { childList: true, subtree: true, characterData: true });
+(() => {
+  let c = new URLSearchParams(location.search).get('lang'); try { c = c || localStorage.getItem('rs_lang'); } catch (e) {}
+  if (!c) { const n = (navigator.language || 'en').slice(0, 2); c = ['hi', 'ur', 'ar'].includes(n) ? n : 'en'; }
+  setLang(c, false);
+})();
+
+if ('serviceWorker' in navigator) {
+  const had = !!navigator.serviceWorker.controller; let reloaded = false;
+  navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' }).then(reg => {
+    reg.update().catch(() => {});
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+    setInterval(() => reg.update().catch(() => {}), 30 * 60 * 1000);
+  }).catch(() => {});
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (had && !reloaded) { reloaded = true; location.reload(); } });
+}
+$('fixapp').onclick = async e => {
+  e.preventDefault(); say('Updating the app…');
+  try { const regs = await navigator.serviceWorker.getRegistrations(); await Promise.all(regs.map(r => r.unregister())); const ks = await caches.keys(); await Promise.all(ks.map(k => caches.delete(k))); } catch (x) {}
+  location.href = '/?updated=' + Date.now();
+};
 renderHistory();
 if (location.hash === '#stories') setTab('stories');
 const q = new URLSearchParams(location.search), shared = q.get('url') || q.get('text');
