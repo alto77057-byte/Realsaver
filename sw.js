@@ -1,4 +1,4 @@
-const V = 'reelsaver-v12';
+const V = 'reelsaver-v13';
 const SHELL = ['/', '/manifest.webmanifest', '/glass-192.png'];
 self.addEventListener('install', e => {
   // one missing file must never stop the app from installing
