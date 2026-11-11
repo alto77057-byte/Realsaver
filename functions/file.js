@@ -11,7 +11,10 @@ exports.handler = async (event) => {
     const q = event.queryStringParameters || {};
     const u = new URL(q.u);
     if (!okHost(u.hostname)) return { statusCode: 400, body: 'Bad host' };
-    if (q.dl === '1') u.searchParams.set('dl', '1');
+    if (q.dl === '1') {
+      u.searchParams.set('dl', '1');                         // Instagram/Facebook CDN convention
+      if (/(^|\.)apify\.com$/.test(u.hostname)) u.searchParams.set('attachment', 'true'); // Apify's own convention
+    }
     return { statusCode: 302, headers: { Location: u.toString(), 'Cache-Control': 'no-store' }, body: '' };
   } catch { return { statusCode: 400, body: 'Bad request' }; }
 };
