@@ -2,6 +2,7 @@
 const ALLOWED = [
   'cdninstagram.com', 'fbcdn.net',                 // Instagram, and Facebook's own CDN
   'tiktokcdn.com', 'tiktokcdn-us.com', 'tiktokcdn-eu.com', 'tiktokv.com', 'ibyteimg.com', 'tikwm.com', // TikTok (direct + free resolver)
+  'twimg.com',                                     // X / Twitter's own CDN (video.twimg.com, pbs.twimg.com)
   'apify.com',                                     // Apify-hosted fallback files (e.g. the Facebook downloader)
 ];
 const okHost = h => ALLOWED.some(d => h === d || h.endsWith('.' + d));
