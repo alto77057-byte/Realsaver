@@ -293,7 +293,7 @@ function show(d){
   d.items.forEach((it, n) => {
     const w = el('div', { className: 'item' }), st = el('div', { className: 'stage' });
     const media = it.type === 'video'
-      ? el('video', { src: it.url, controls: true, playsInline: true, preload: 'metadata', poster: fileUrl(it.thumb, 'p.jpg') })
+      ? el('video', { src: fileUrl(it.url, 'v.mp4'), controls: true, playsInline: true, preload: 'metadata', poster: fileUrl(it.thumb, 'p.jpg') })
       : el('img', { src: fileUrl(it.url, 'p.jpg'), alt: '' });
     media.referrerPolicy = 'no-referrer'; st.append(media); w.append(st);
     const chips = el('div', { className: 'chips' });
